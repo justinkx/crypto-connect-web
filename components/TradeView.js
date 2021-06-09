@@ -1,21 +1,23 @@
 import React, { memo, useRef, useEffect, useCallback, useState } from "react";
 import { createChart, CrosshairMode } from "lightweight-charts";
 
-import { priceData } from "./data/pricedata";
-import { volumeData } from "./data/volumeData";
-import { fetchCandleStickData } from "./utils/fetchService";
-
-const TradeView = ({ pair = "BTCUSD" }) => {
-  const [candleStickData, setCandleData] = useState([]);
-
+const TradeView = ({ initialChartData }) => {
   const chartContainerRef = useRef();
   const chart = useRef();
   const resizeObserver = useRef();
 
-  const fetchCandleData = useCallback(async () => {
-    const candleData = await fetchCandleStickData();
-    setCandleData(candleData);
-  }, []);
+  const setInitialData = useCallback(() => {
+    const candleSeries = chart?.current?.addCandlestickSeries({
+      upColor: "#4bffb5",
+      downColor: "#ff4976",
+      borderDownColor: "#ff4976",
+      borderUpColor: "#4bffb5",
+      wickDownColor: "#838ca1",
+      wickUpColor: "#838ca1",
+    });
+    console.log("initialChartData", candleSeries);
+    candleSeries.setData(initialChartData);
+  }, [initialChartData]);
 
   useEffect(() => {
     chart.current = createChart(chartContainerRef.current, {
@@ -43,34 +45,8 @@ const TradeView = ({ pair = "BTCUSD" }) => {
         borderColor: "#485c7b",
       },
     });
-
-    fetchCandleData();
-  }, []);
-
-  const candleSeries = chart?.current?.addCandlestickSeries({
-    upColor: "#4bffb5",
-    downColor: "#ff4976",
-    borderDownColor: "#ff4976",
-    borderUpColor: "#4bffb5",
-    wickDownColor: "#838ca1",
-    wickUpColor: "#838ca1",
-  });
-
-  candleSeries?.setData(candleStickData);
-
-  // useEffect(() => {
-  //   resizeObserver.current = new ResizeObserver((entries) => {
-  //     const { width, height } = entries[0].contentRect;
-  //     chart.current.applyOptions({ width, height });
-  //     setTimeout(() => {
-  //       chart.current.timeScale().fitContent();
-  //     }, 0);
-  //   });
-
-  //   resizeObserver.current.observe(chartContainerRef.current);
-
-  //   return () => resizeObserver.current.disconnect();
-  // }, []);
+    setInitialData();
+  }, [setInitialData]);
 
   return <div ref={chartContainerRef} className="container" />;
 };

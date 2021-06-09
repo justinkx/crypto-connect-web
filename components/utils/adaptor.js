@@ -14,12 +14,12 @@ export const candleStickAdaptor = (data) => {
     ignore,
   ] = data;
   return {
-    time: openTime,
+    time: openTime / 1000,
     open: parseFloat(open),
     high: parseFloat(high),
     low: parseFloat(low),
     close: parseFloat(close),
-    volume,
+    volume: parseFloat(volume),
     // closeTime,
     // quoteAssetVolume,
     // numberOfTrades,

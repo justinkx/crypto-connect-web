@@ -1,16 +1,16 @@
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 
-const TradeView = dynamic(() => import("../components/TradeView"), {
+const TradeViewChart = dynamic(() => import("../components/index"), {
   ssr: false,
 });
 
 export default function Home() {
   const router = useRouter();
-  const { pair = null } = router.query;
+  const { pair = "BTCBUSD" } = router.query;
   return (
     <div className="container">
-      <TradeView pair={pair} />
+      <TradeViewChart pair={pair} />
     </div>
   );
 }

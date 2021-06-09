@@ -1,16 +1,12 @@
 import React, { memo, useRef, useEffect, useCallback } from "react";
 import { createChart, CrosshairMode } from "lightweight-charts";
 
-import {
-  condleStickDefaultConfig,
-  histogramDefaultConfig,
-} from "./utils/constants";
-
 const TradeView = ({
   initialChartData,
   updatedata = null,
-  candleStickConfig = condleStickDefaultConfig,
-  histogramConfig = histogramDefaultConfig,
+  candleStickConfig = {},
+  histogramConfig = {},
+  chartLayout = {},
 }) => {
   const resizeObserver = useRef();
   const chartContainerRef = useRef();
@@ -24,7 +20,7 @@ const TradeView = ({
     candleSeries.current.setData(initialChartData);
     volumeSeries.current = chart.current.addHistogramSeries(histogramConfig);
     volumeSeries?.current?.setData(initialChartData);
-  }, [initialChartData, candleStickConfig]);
+  }, [initialChartData, candleStickConfig, histogramConfig]);
 
   useEffect(() => {
     if (updatedata) {
@@ -37,32 +33,10 @@ const TradeView = ({
     chart.current = createChart(chartContainerRef.current, {
       width: chartContainerRef.current.clientWidth,
       height: chartContainerRef.current.clientHeight,
-      layout: {
-        backgroundColor: "#253248",
-        textColor: "rgba(255, 255, 255, 0.9)",
-      },
-      grid: {
-        vertLines: {
-          color: "#334158",
-        },
-        horzLines: {
-          color: "#334158",
-        },
-      },
-      crosshair: {
-        mode: CrosshairMode.Normal,
-      },
-      priceScale: {
-        borderColor: "#485c7b",
-      },
-      timeScale: {
-        borderColor: "#485c7b",
-        timeVisible: true,
-        secondsVisible: false,
-      },
+      ...chartLayout,
     });
     setInitialData();
-  }, [setInitialData]);
+  }, [setInitialData, chartLayout]);
 
   // Resize chart on container resizes.
   useEffect(() => {

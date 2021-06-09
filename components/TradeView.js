@@ -1,23 +1,37 @@
-import React, { memo, useRef, useEffect, useCallback, useState } from "react";
+import React, { memo, useRef, useEffect, useCallback } from "react";
 import { createChart, CrosshairMode } from "lightweight-charts";
 
-const TradeView = ({ initialChartData }) => {
+import {
+  condleStickDefaultConfig,
+  histogramDefaultConfig,
+} from "./utils/constants";
+
+const TradeView = ({
+  initialChartData,
+  updatedata = null,
+  candleStickConfig = condleStickDefaultConfig,
+  histogramConfig = histogramDefaultConfig,
+}) => {
+  const resizeObserver = useRef();
   const chartContainerRef = useRef();
   const chart = useRef();
-  const resizeObserver = useRef();
+  const candleSeries = useRef();
+  const volumeSeries = useRef();
 
   const setInitialData = useCallback(() => {
-    const candleSeries = chart?.current?.addCandlestickSeries({
-      upColor: "#4bffb5",
-      downColor: "#ff4976",
-      borderDownColor: "#ff4976",
-      borderUpColor: "#4bffb5",
-      wickDownColor: "#838ca1",
-      wickUpColor: "#838ca1",
-    });
-    console.log("initialChartData", candleSeries);
-    candleSeries.setData(initialChartData);
-  }, [initialChartData]);
+    candleSeries.current =
+      chart?.current?.addCandlestickSeries(candleStickConfig);
+    candleSeries.current.setData(initialChartData);
+    volumeSeries.current = chart.current.addHistogramSeries(histogramConfig);
+    volumeSeries?.current?.setData(initialChartData);
+  }, [initialChartData, candleStickConfig]);
+
+  useEffect(() => {
+    if (updatedata) {
+      candleSeries?.current?.update(updatedata);
+      volumeSeries?.current?.update(updatedata);
+    }
+  }, [updatedata]);
 
   useEffect(() => {
     chart.current = createChart(chartContainerRef.current, {
@@ -43,11 +57,27 @@ const TradeView = ({ initialChartData }) => {
       },
       timeScale: {
         borderColor: "#485c7b",
+        timeVisible: true,
+        secondsVisible: false,
       },
     });
     setInitialData();
   }, [setInitialData]);
 
+  // Resize chart on container resizes.
+  useEffect(() => {
+    resizeObserver.current = new ResizeObserver((entries) => {
+      const { width, height } = entries[0].contentRect;
+      chart.current.applyOptions({
+        width,
+        height,
+      });
+    });
+
+    resizeObserver.current.observe(chartContainerRef.current);
+
+    return () => resizeObserver.current.disconnect();
+  }, []);
   return <div ref={chartContainerRef} className="container" />;
 };
 

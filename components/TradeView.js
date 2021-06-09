@@ -1,5 +1,5 @@
 import React, { memo, useRef, useEffect, useCallback } from "react";
-import { createChart, CrosshairMode } from "lightweight-charts";
+import { createChart } from "lightweight-charts";
 
 const TradeView = ({
   initialChartData,

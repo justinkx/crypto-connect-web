@@ -703,6 +703,11 @@ ext@^1.1.2:
   dependencies:
     type "^2.0.0"
 
+fancy-canvas@0.2.2:
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/fancy-canvas/-/fancy-canvas-0.2.2.tgz#33fd4976724169a1eda5015f515a2a1302d1ec91"
+  integrity sha512-50qi8xA0QkHbjmb8h7XQ6k2fvD7y/yMfiUw9YTarJ7rWrq6o5/3CCXPouYk+XSLASvvxtjyiQLRBFt3qkE3oyA==
+
 fill-range@^7.0.1:
   version "7.0.1"
   resolved "https://registry.yarnpkg.com/fill-range/-/fill-range-7.0.1.tgz#1919a6a7c75fe38b2c7c77e5198535da9acdda40"
@@ -1020,6 +1025,13 @@ json5@^1.0.1:
   integrity sha512-aKS4WQjPenRxiQsC93MNfjx+nbF4PAdYzmd/1JIj8HYzqfbu86beTuNgXDzPknWk0n0uARlyewZo4s++ES36Ow==
   dependencies:
     minimist "^1.2.0"
+
+lightweight-charts@^3.3.0:
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/lightweight-charts/-/lightweight-charts-3.3.0.tgz#cbaafe8977ac342d45e847e12eb5c7b36007358a"
+  integrity sha512-W5jeBrXcHG8eHnIQ0L2CB9TLkrrsjNPlQq5SICPO8PnJ3dJ8jZkLCAwemZ7Ym7ZGCfKCz6ow1EPbyzNYxblnkw==
+  dependencies:
+    fancy-canvas "0.2.2"
 
 loader-utils@1.2.3:
   version "1.2.3"

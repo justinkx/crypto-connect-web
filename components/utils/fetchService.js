@@ -1,4 +1,5 @@
 import { BASE_URL } from "./constants";
+import { parseCandleStickData } from "./candleStickService";
 
 export const fetchCandleStickData = async (
   symbol = "BTCBUSD",
@@ -7,6 +8,5 @@ export const fetchCandleStickData = async (
   const url = `${BASE_URL}symbol=${symbol}&interval=${interval}`;
   const result = await fetch(url);
   const data = await result.json();
-
-  return data;
+  return parseCandleStickData(data);
 };

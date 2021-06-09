@@ -1,15 +1,24 @@
-import React, { memo, useRef, useEffect } from "react";
-import * as Charts from "lightweight-charts";
+import React, { memo, useRef, useEffect, useCallback, useState } from "react";
+import { createChart, CrosshairMode } from "lightweight-charts";
 
 import { priceData } from "./data/pricedata";
 import { volumeData } from "./data/volumeData";
+import { fetchCandleStickData } from "./utils/fetchService";
 
 const TradeView = ({ pair = "BTCUSD" }) => {
+  const [candleStickData, setCandleData] = useState([]);
+
   const chartContainerRef = useRef();
   const chart = useRef();
   const resizeObserver = useRef();
+
+  const fetchCandleData = useCallback(async () => {
+    const candleData = await fetchCandleStickData();
+    setCandleData(candleData);
+  }, []);
+
   useEffect(() => {
-    chart.current = Charts.createChart(chartContainerRef.current, {
+    chart.current = createChart(chartContainerRef.current, {
       width: chartContainerRef.current.clientWidth,
       height: chartContainerRef.current.clientHeight,
       layout: {
@@ -25,7 +34,7 @@ const TradeView = ({ pair = "BTCUSD" }) => {
         },
       },
       crosshair: {
-        mode: Charts.CrosshairMode.Normal,
+        mode: CrosshairMode.Normal,
       },
       priceScale: {
         borderColor: "#485c7b",
@@ -35,47 +44,33 @@ const TradeView = ({ pair = "BTCUSD" }) => {
       },
     });
 
-    const candleSeries = chart.current.addCandlestickSeries({
-      upColor: "#4bffb5",
-      downColor: "#ff4976",
-      borderDownColor: "#ff4976",
-      borderUpColor: "#4bffb5",
-      wickDownColor: "#838ca1",
-      wickUpColor: "#838ca1",
-    });
-
-    candleSeries.setData(priceData);
-
-    const volumeSeries = chart.current.addHistogramSeries({
-      color: "#182233",
-      lineWidth: 2,
-      priceFormat: {
-        type: "volume",
-      },
-      overlay: true,
-      scaleMargins: {
-        top: 0.8,
-        bottom: 0,
-      },
-    });
-
-    volumeSeries.setData(volumeData);
+    fetchCandleData();
   }, []);
 
-  // Resize chart on container resizes.
-  useEffect(() => {
-    resizeObserver.current = new ResizeObserver((entries) => {
-      const { width, height } = entries[0].contentRect;
-      chart.current.applyOptions({ width, height });
-      setTimeout(() => {
-        chart.current.timeScale().fitContent();
-      }, 0);
-    });
+  const candleSeries = chart?.current?.addCandlestickSeries({
+    upColor: "#4bffb5",
+    downColor: "#ff4976",
+    borderDownColor: "#ff4976",
+    borderUpColor: "#4bffb5",
+    wickDownColor: "#838ca1",
+    wickUpColor: "#838ca1",
+  });
 
-    resizeObserver.current.observe(chartContainerRef.current);
+  candleSeries?.setData(candleStickData);
 
-    return () => resizeObserver.current.disconnect();
-  }, []);
+  // useEffect(() => {
+  //   resizeObserver.current = new ResizeObserver((entries) => {
+  //     const { width, height } = entries[0].contentRect;
+  //     chart.current.applyOptions({ width, height });
+  //     setTimeout(() => {
+  //       chart.current.timeScale().fitContent();
+  //     }, 0);
+  //   });
+
+  //   resizeObserver.current.observe(chartContainerRef.current);
+
+  //   return () => resizeObserver.current.disconnect();
+  // }, []);
 
   return <div ref={chartContainerRef} className="container" />;
 };

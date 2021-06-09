@@ -14,7 +14,7 @@ export const candleStickAdaptor = (data) => {
     ignore,
   ] = data;
   return {
-    openTime,
+    time: openTime,
     open,
     high,
     low,

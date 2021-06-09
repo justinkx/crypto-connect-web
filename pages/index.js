@@ -1,11 +1,16 @@
-import styles from "../styles/Home.module.css";
+import dynamic from "next/dynamic";
+import { useRouter } from "next/router";
 
-import TradeView from "../components/TradeView";
+const TradeView = dynamic(() => import("../components/TradeView"), {
+  ssr: false,
+});
 
 export default function Home() {
+  const router = useRouter();
+  const { pair = null } = router.query;
   return (
-    <div className={styles.container}>
-      <TradeView />
+    <div className="container">
+      <TradeView pair={pair} />
     </div>
   );
 }

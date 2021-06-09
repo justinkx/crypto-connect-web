@@ -8,6 +8,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "date-fn": "^0.0.2",
     "lightweight-charts": "^3.3.0",
     "next": "10.2.3",
     "nextjs-websocket": "^1.0.6",

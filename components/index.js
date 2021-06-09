@@ -44,7 +44,7 @@ const TradeViewChart = ({
     };
   }, [pair, interval]);
 
-  if (!candleStickData) return null;
+  if (!candleStickData) return <div className="loader" />;
   return (
     <TradeView
       updatedata={updatedata}

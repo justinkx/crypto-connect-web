@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useCallback, useState, useRef } from "react";
+import React, { memo, useEffect, useCallback, useState } from "react";
 
 import { fetchCandleStickData } from "./utils/fetchService";
 import TradeView from "./TradeView";

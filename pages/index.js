@@ -1,7 +1,7 @@
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 
-const TradeViewChart = dynamic(() => import("../components/index"), {
+const TradeViewChart = dynamic(() => import("react-crypto-chart"), {
   ssr: false,
 });
 

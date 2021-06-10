@@ -1,4 +1,4 @@
-import { CrosshairMode } from "lightweight-charts";
+import { CrosshairMode, LineStyle } from "lightweight-charts";
 
 export const BASE_URL = "https://api.binance.com/api/v3/klines?";
 export const WS_URL = "wss://stream.binance.com:9443/ws";
@@ -27,15 +27,17 @@ export const histogramDefaultConfig = {
 
 export const defaultChartLayout = {
   layout: {
-    backgroundColor: "#253248",
-    textColor: "rgba(255, 255, 255, 0.9)",
+    backgroundColor: "#ededed",
+    textColor: "#253248",
   },
   grid: {
     vertLines: {
-      color: "#334158",
+      color: "#838fa3",
+      style: LineStyle.SparseDotted,
     },
     horzLines: {
-      color: "#334158",
+      color: "#838fa3",
+      style: LineStyle.SparseDotted,
     },
   },
   crosshair: {

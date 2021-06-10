@@ -20,6 +20,13 @@ const TradeView = ({
     candleSeries.current.setData(initialChartData);
     volumeSeries.current = chart.current.addHistogramSeries(histogramConfig);
     volumeSeries?.current?.setData(initialChartData);
+    candleSeries.current.applyOptions({
+      priceFormat: {
+        type: "price",
+        precision: 5,
+        minMove: 0.001,
+      },
+    });
   }, [initialChartData, candleStickConfig, histogramConfig]);
 
   useEffect(() => {
@@ -45,6 +52,11 @@ const TradeView = ({
       chart.current.applyOptions({
         width,
         height,
+        priceFormat: {
+          type: "price",
+          precision: 5,
+          minMove: 0.001,
+        },
       });
     });
 
